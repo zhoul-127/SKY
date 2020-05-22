@@ -61,7 +61,8 @@
 		
 		<el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" border class="table-box"
 		 row-key="key" v-loading="loading" :height="tableH">
-			<el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
+			<el-table-column v-for="item in columnList" width="110" :show-overflow-tooltip="true" :prop="item.prop" :label="item.label"></el-table-column>
+			<!-- <el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
 			<el-table-column :show-overflow-tooltip="true" prop="Subject" label="科目"></el-table-column>
 			<el-table-column :show-overflow-tooltip="true" prop="SubjectType" label="科目类型"></el-table-column>
 			<el-table-column :show-overflow-tooltip="true" prop="AchieveDate" label="考试时间">
@@ -69,7 +70,7 @@
 					<span>{{scope.row.AchieveDate?scope.row.AchieveDate.split('T')[0]:""}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column :show-overflow-tooltip="true" prop="Score" label="得分"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="Score" label="得分"></el-table-column> -->
 		</el-table>
 		<!-- 分页 -->
 		<div class="block pagination">
@@ -101,6 +102,11 @@
 		},
 		data() {
 			return {
+				columnList:[
+					{prop:'Name',label:'姓名'},
+					{prop:'Department',label:'部门'},
+					{prop:'Duty',label:'职务'},
+				],
 				tableH:'',
 				formInline:{
 					Name:"",
@@ -121,8 +127,6 @@
 				addFlag: false, // 新增 （新增和导入互斥）
 				importFlag: false, // 导入 （新增和导入互斥）
 				innerVisible: false, // 使用人选择弹出显示
-				department: [], // 使用人
-				flag: "", // 是否是管理员 true是 false否
 				submitFlag: true,
 				submitSuccessId: "",
 				currentCollapse: ["1", "2", "3", "4"],
@@ -135,7 +139,7 @@
 				childId: "",
 				approveHistory: [],
 				formData: {
-					processId: "", //申请编号
+					processId: "", //
 					status: "",
 					applyDate: "",
 					subject: "",
@@ -146,50 +150,11 @@
 					uploadFile: [],
 					participation: "",
 					planTime: "",
-					provider: "", //供应商
-					projectNum: "", //项目编号
-					projectName: "" //项目名称
+					provider: "", //
+					projectNum: "", //
+					projectName: "" //
 				},
 				fileRefIds: [],
-				rules: {
-					subject: [{
-							required: true,
-							message: "主题不能为空",
-							trigger: ["blur", "change"]
-						},
-						{
-							min: 6,
-							max: 50,
-							message: "申请主题长度为 6 - 50 个字符",
-							trigger: ["blur", "change"]
-						}
-					],
-					order: {
-						required: true,
-						message: "项目编号不能为空",
-						trigger: ["blur", "change"]
-					},
-					file: {
-						required: true,
-						message: "上传文件不能为空",
-						trigger: "change"
-					},
-					participation: {
-						required: true,
-						message: "验收参与人员不能为空",
-						trigger: "change"
-					},
-					participation: {
-						required: true,
-						message: "验收参与人员不能为空",
-						trigger: "change"
-					},
-					planTime: {
-						required: true,
-						message: "计划验收时间不能为空",
-						trigger: "change"
-					}
-				},
 				arr: [],
 				dialogVisible: false,
 				defaultExpandAll: true,
@@ -199,11 +164,6 @@
 				submitTemplate: [],
 				mainTemplatecachedId: "",
 				equipDialog: false,
-				// pickerOptions: {
-				//   disabledDate(time) {
-				//     return time.getTime() < Date.now() - 8.64e7;
-				//   }
-				// },
 				purchaseOrder: [],
 				templateList: [],
 				tableData: [],
@@ -275,8 +235,26 @@
 					dateEnd: this.formInline.dateEnd,
 				};
 				this.$api.getScroces(data).then(res => {
-					this.tableData = res
-					// this.totalCount = res.pageModel.PageCount
+					this.tableData = [];
+					this.columnList = [
+						{prop:'Name',label:'姓名'},
+						{prop:'Department',label:'部门'},
+						{prop:'Duty',label:'职务'},
+					];
+					for(var i=0;i<res.length;i++){
+						var dataObj = res[i].Name;
+						for(var j=0;j<res[i].Value.length;j++){
+							if(i == 0){
+							var obj = {
+								prop:'Date'+j,
+								label:res[i].Value[j].Date.split("T")[0],
+								}
+							this.columnList.push(obj);
+							}
+							dataObj['Date'+j] = res[i].Value[j].Score;
+						}
+						this.tableData.push(dataObj);
+					}
 				}).catch(err => {
 					console.log(err);
 				})

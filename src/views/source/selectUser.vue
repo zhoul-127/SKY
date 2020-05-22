@@ -193,7 +193,6 @@ export default {
       	'pageModel.pageSize': this.PageSize,
       };
       this.$api.userList(data).then(res => {
-		  debugger;
       	this.tableData = res.data;
       	this.totalCount = res.pageModel.PageCount;
 				this.$forceUpdate();

@@ -103,7 +103,6 @@
 		data() {
 			// 验证表单
 			var validateRoleName = (rule, value, callback) => {
-				debugger
 				if (value === '') {
 					callback(new Error('输入不能为空'))
 				} else {
@@ -207,7 +206,7 @@
 				var that = this;
 				this.$refs[addRoleForm].validate(valid => {
 					if (valid) {
-						that.$api.saveSource({personalscroce:that.addRoleForm}).then(res => {
+						that.$api.saveSource(that.addRoleForm).then(res => {
 							if (res == true) {
 								that.$message.success(that.action+'成功！')
 								that.hidePanel()

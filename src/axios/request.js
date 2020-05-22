@@ -24,11 +24,12 @@ service.interceptors.request.use(
             let tokeid = window.localStorage.getItem('token');
             config.headers.common['Authorization'] = tokeid;
             config.headers.common['appkey'] = "_0HpusonrxaXfR3HbRU11On-z_xGglq1ykIHxudI6KxmVBoZRfu2XuVlB0qA";
-        }
+			
+		}
         if (config.method=='post'){
-            config.data = config.params;
+			config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; 
+            config.data = qs.stringify(config.params);
         }
-		debugger;
         return config
     },
     error => {

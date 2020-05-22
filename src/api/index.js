@@ -55,6 +55,13 @@ const api = {
 			params: data
 		})
 	},
+	deleteUser(data) {
+		return request({
+			url: `${Intranet}/Personalfiles/Delete`,
+			method: 'post',
+			params: data
+		})
+	},
 	getSubject(data) {
 		return request({
 			url: `${Intranet}/dicsubject/GetAll`,
@@ -87,6 +94,13 @@ const api = {
 		return request({
 			url: `${Intranet}/Personalscroce/GetLatestAchiveDate`,
 			method: 'get',
+			params: data
+		})
+	},
+	importSource(){
+		return request({
+			url: `${Intranet}/Personalfiles/ImportPersonalfileExcel`,
+			method: 'post',
 			params: data
 		})
 	},

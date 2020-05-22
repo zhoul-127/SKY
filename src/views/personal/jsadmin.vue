@@ -27,7 +27,7 @@
 		<add-rolefrom :dialogAddUser.sync="addVisible" :userId="userId"></add-rolefrom>
 		<!-- 表格 -->
 		<el-table ref="multipleTable" :data="tableData"  border  :height="tableH">
-			<el-table-column prop="Name" label="姓名111" sortable>
+			<el-table-column prop="Name" label="姓名" sortable>
 			</el-table-column>
 			<el-table-column prop="Company" label="公司" sortable width="150">
 			</el-table-column>
@@ -71,7 +71,7 @@
 			<el-table-column label="操作" width="180">
 				<template slot-scope="scope">
 					<el-button size="mini" @click.native="editRoleForm(scope.row)">修改</el-button>
-					<el-button size="mini" @click="deleteRole(scope.row.id, scope.$index)" type="danger">删除</el-button>
+					<el-button size="mini" @click="deleteRole(scope.row.Guid, scope.$index)" type="danger">删除</el-button>
 					<!-- <el-button size="mini"  @click="jurisdiction(scope.row.id)" type="primary" plain>权限配置</el-button> -->
 				</template>
 			</el-table-column>
@@ -140,20 +140,20 @@
 					console.log(err);
 				})
 			},
-			// 删除角色
+			// 删除用户
 			deleteRole(id, index) {
-				return;
 				this.$confirm('确认删除？')
 					.then(_ => {
-						axiosPost('base/role/deleteRole', id).then(result => {
-							if (result.code === 200) {
-								this.tableData.splice(index, 1)
-								this.$message('删除成功！')
+						this.$api.saveUser({guid:id}).then(res => {
+							if (res) {
+								this.$message.success('删除成功！')
+								this.roleList();
 							} else {
-								this.$message('删除失败')
+								this.$message.warning('删除失败')
 							}
+						}).catch(err => {
+							console.log(err);
 						})
-						done()
 					})
 					.catch(_ => {})
 			},
