@@ -1,0 +1,603 @@
+body {
+  background: #fff;
+  min-width: 1200px;
+  color: #333;
+  padding-right: 0 !important;
+  font: 14px/1.5 Helvetica, Arial, 'Hiragino Sans GB', 'Microsoft Yahei',
+    '微软雅黑', STHeiti, '华文细黑', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.pd10 {
+  padding: 10px;
+}
+
+.pd20 {
+  padding: 20px;
+}
+
+.p0 {
+  padding: 0px;
+}
+
+.pt10 {
+  padding-top: 10px;
+}
+
+.pt20 {
+  padding-top: 20px;
+}
+
+.pt30 {
+  padding-top: 30px;
+}
+
+.pb10 {
+  padding-bottom: 10px;
+}
+
+.pb20 {
+  padding-bottom: 20px;
+}
+
+.pl10 {
+  padding-left: 10px;
+}
+
+.pr10 {
+  padding-right: 10px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mt30 {
+  margin-top: 30px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.ml30 {
+  margin-left: 30px;
+}
+
+.mr30 {
+  margin-right: 30px;
+}
+
+/* 清除浮动 */
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*IE/7/6*/
+}
+
+.clear {
+  clear: both;
+  line-height: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.blue {
+  color: #26a2ff;
+}
+
+.red {
+  color: red;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+/* 表单 */
+
+.el-table .cell {
+  text-align: center;
+}
+
+.el-table--fit {
+  border: 1px #ddd solid;
+}
+
+/* 表格 */
+.el-table thead {
+  color: #333;
+}
+
+.el-form-item {
+  margin-bottom: 18px;
+}
+
+.el-table--fit {
+  border: 1px #fff solid;
+}
+
+.el-table th {
+  background: #e6ecf1;
+}
+
+.el-table__row:nth-child(2n) {
+  background: #f6f9fa;
+}
+
+.el-table__row:hover {
+  background: rgb(243, 246, 254);
+}
+
+.el-table td,
+.el-table th {
+  border-bottom: 0;
+  border-bottom: 1px #ddd solid;
+}
+
+.el-table td:first-of-type,
+.el-table th:first-of-type {
+  border-left: 0;
+}
+
+.el-table th > .cell {
+  font-weight: 700;
+}
+
+.form-title {
+  font-size: 16px;
+  line-height: 50px;
+  color: #0547aa;
+}
+
+.form-title:first-of-type {
+  margin-top: -18px;
+}
+
+.form-title .icon {
+  width: 4px;
+  height: 20px;
+  background: #0547aa;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  margin-top: -5px;
+}
+
+.query-title {
+  background: #eff2f9;
+  padding-left: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.text-title {
+  line-height: 40px;
+}
+
+.common-fold .collapse-title {
+  flex: 1 0 90%;
+  order: 1;
+}
+
+.common-fold .el-collapse-item__arrow {
+  order: -1;
+}
+
+.textarea {
+  border: 1px #eee solid;
+  padding: 2%;
+  width: 96%;
+}
+
+.el-pagination {
+  margin-top: 20px;
+}
+
+.common-pagination {
+  position: relative;
+  text-align: center;
+}
+
+.common-pagination > .have-choice {
+  position: absolute;
+  top: 0px !important;
+  left: 0px;
+}
+
+/* 弹窗表单 */
+.el-dialog {
+  width: 30%;
+}
+
+.el-dialog__body {
+  padding: 20px 30px 0 30px;
+}
+
+.el-dialog__header {
+  background: #e6ecf1;
+  padding: 10px 20px;
+}
+
+.el-dialog__headerbtn {
+  top: 13px;
+}
+
+.el-dialog__title {
+  font-size: 16px;
+}
+
+.el-form-item__content {
+  line-height: 35px;
+}
+
+.el-form-item__label {
+  line-height: 35px;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  /* display: inline-block; */
+}
+
+.sp-icon {
+  background: url('.././images/sp-icon.png') no-repeat;
+}
+
+.sq-icon {
+  background: url('.././images/sq-icon.png') no-repeat;
+}
+
+.center {
+  text-align: center;
+}
+
+/* 通用css */
+.common-row .el-form-item {
+  margin-bottom: 8px;
+}
+
+.scrollbar {
+  overflow: auto;
+  min-width: 260px;
+  padding-bottom: 60px;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 16px;
+  background-color: #f5f5f5;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #c1c1c1;
+}
+
+/* 输入框 统一高度 */
+.el-input__inner {
+  height: 32px;
+  line-height: 32px;
+}
+
+/* 修复时间和内容高度不统一 */
+.el-input__icon {
+  line-height: normal;
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: #666;
+}
+
+/****树节点颜色选中***/
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #e0e0e0;
+}
+
+.el-tree-node__content {
+  position: relative;
+  line-height: 30px;
+  height: 30px;
+}
+
+/* 禁止换行 */
+.el-form {
+  white-space: nowrap;
+}
+
+/**修改批量导入css*/
+.upload-file {
+  height: 28px;
+  line-height: 28px !important;
+  display: flex;
+  flex-direction: row;
+}
+
+.upload-file .el-upload-list {
+  order: -1;
+  padding-right: 10px;
+  border: 1px solid #dcdfe6;
+  height: 28px;
+  line-height: 28px;
+  position: relative;
+  border-radius: 4px;
+  width: 298px;
+  overflow: hidden !important;
+}
+
+.upload-file .el-upload-list__item:first-child {
+  margin-top: 0px;
+  height: 28px !important;
+}
+
+.upload-file .el-upload-list__item:hover {
+  background: #fff;
+}
+
+.upload-file .el-upload {
+  margin-left: 20px;
+}
+
+.upload-file .el-upload:focus {
+  border-color: #fff;
+}
+
+/* 审批历史 图标 */
+.history .el-icon-s-help,
+.history .el-icon-error {
+  color: red;
+  font-size: 18px;
+}
+
+.history .el-icon-s-help {
+  color: #e6a23c;
+}
+
+.history .el-icon-success {
+  color: #63b167;
+  font-size: 18px;
+}
+
+/* 修改分页样式 */
+.z-pages {
+  display: block;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/******保存和提交通用样式*******/
+.btns {
+  margin: 25px 0;
+  display: block;
+  text-align: center;
+}
+
+.btns.el-form-item {
+  display: block;
+}
+
+.btns .el-button.is-disabled {
+  opacity: 0.6;
+}
+
+.btns .submit-btn.el-button {
+  background: #004ea2;
+  color: #fff;
+}
+
+.btns .save-btn.el-button {
+  background: #2fce6a;
+  color: #fff;
+}
+
+.pagination {
+  text-align: center;
+  position: relative;
+}
+
+.pagination .select-info {
+  position: absolute;
+  left: 0;
+  top: 5px;
+}
+
+/* 手势 */
+.gesture {
+  cursor: pointer;
+}
+
+/***修改表格样式****/
+.common-table /deep/ .el-table th {
+  padding: 8px 0;
+}
+
+.common-table /deep/ .el-table td {
+  padding: 10px 0;
+}
+
+.common-table /deep/ .el-table th .cell {
+  font-size: 14px;
+}
+
+.common-table /deep/ .el-table .cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* padding: 0; */
+  font-size: 12px;
+}
+
+/******修改输入框样式为180px******/
+.el-form--inline .common-row .el-form-item__content {
+  width: 180px;
+}
+
+.el-input.is-disabled .el-input__inner {
+  //width: 180px;
+}
+
+/* 盘点样式 */
+.inventory .el-input__prefix {
+  left: 158px;
+  top: -2px !important;
+}
+
+.inventory .inventory .el-input__prefix {
+  padding: 0;
+}
+
+/*****textarea字体*****/
+.el-textarea__inner {
+  font-family: Helvetica, Arial, 'Hiragino Sans GB', 'Microsoft Yahei';
+}
+
+/*spa引用样式*/
+.home .el-main .sapGeiDe {
+  margin: 0 !important;
+  height: 91% !important;
+  width: 100%;
+}
+
+.home .el-main .main-view {
+  position: relative;
+}
+
+/* 通用备注样式 */
+.add-common-comment {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.add-common-comment > .comment-title {
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.add-common-comment span {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  color: #aaa;
+}
+
+.current-word {
+  position: absolute;
+  right: 15px;
+  bottom: 5px;
+  color: #aaa;
+}
+
+// 折叠全局加disabled后样式
+.common-collapse {
+  .el-collapse-item__arrow {
+    .el-icon-arrow-right {
+      color: #333 !important;
+    }
+  }
+
+  .is-disabled {
+    .el-collapse-item__arrow {
+      margin: 0 0px 0 -75px;
+      display: none;
+    }
+
+    .collapse-title {
+      padding-left: 21px;
+      color: #333;
+    }
+  }
+}
+
+.el-input__prefix {
+  left: auto;
+  right: 25px;
+}
+
+.sb-alloc .addWidthinged .el-input.is-disabled .el-input__inner {
+  width: 202px !important;
+}
+
+.sb-alloc .addWidthingeding .el-input__inner {
+  width: 202px !important;
+}
+
+.sb-alloc {
+  .goThroughing > span {
+    pointer-events: none !important;
+  }
+}
