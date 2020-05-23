@@ -6,7 +6,6 @@ import { axiosGet } from '@/api/index.js'
 // import { getMenus } from '@/api'
 
 import router from '@/router'
-import menu from '@/assets/menu.json'
 
 // 2. 使用Vue.use()安装vuex这个插件
 Vue.use(Vuex)
@@ -46,26 +45,6 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    getMenus (context, arg) {
-      // 执行异步操作
-      axiosGet('base/api/getMenu').then(res => {
-        if (res.code === 200) {
-          console.log(res.data)
-          // Loading.service(options)
-          localStorage.setItem('menus', JSON.stringify(res))
-          localStorage.setItem('routes', JSON.stringify(res))
-          localStorage.setItem('reloadNum', '0')
-          context.commit('initmenus', res)
-        }
-      })
-    },
-    handleUnsealSubject({commit},params){
-      commit('handleUnsealSubject',params);
-    },
-    handleUnsealDetail({commit},params){
-      // 启封list
-      commit('handleUnsealDetail',params);
-    }
   }
 })
 // 4. 将store实例挂载到vue实例上

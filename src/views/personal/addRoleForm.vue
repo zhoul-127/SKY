@@ -113,12 +113,12 @@
 				if (value === '') {
 					callback(new Error('输入不能为空'))
 				} else {
-					if (value !== '') {
-						var reg = /^[A-Za-z0-9\u4e00-\u9fa5]{2,18}$/
-						if (!reg.test(value)) {
-							callback(new Error('角色长度为2-18位'))
-						}
-					}
+					// if (value !== '') {
+					// 	var reg = /^[A-Za-z0-9\u4e00-\u9fa5]{2,18}$/
+					// 	if (!reg.test(value)) {
+					// 		callback(new Error('长度为2-18位'))
+					// 	}
+					// }
 					callback()
 				}
 			}
@@ -141,11 +141,7 @@
 
 				},
 				rules: { // 添加用户验证
-					// Name: [{
-					// 	required: true,
-					// 	validator: validateRoleFlag,
-					// 	trigger: 'blur'
-					// }],
+					Name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
 					Age: [{
 						required: true,
 						validator: validateRoleFlag,
@@ -157,7 +153,7 @@
 			}
 		},
 		methods: {
-			// 添加角色确定
+			// 添加用户确定
 			addRoleSave(addRoleForm) {
 				var that = this;
 				this.$refs[addRoleForm].validate(valid => {

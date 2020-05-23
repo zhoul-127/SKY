@@ -41,19 +41,19 @@
 			</div>
 		</el-form>
 		
-		<el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" border class="table-box"
+		<el-table :data="tableData" style="width: 100%" border class="table-box"
 		 row-key="key" v-loading="loading" :height="tableH">
-		 <el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
-		 <el-table-column :show-overflow-tooltip="true" prop="Department" label="部门"></el-table-column>
-		 <el-table-column :show-overflow-tooltip="true" prop="Duty" label="职务"></el-table-column>
-			<el-table-column v-for="item in columnList" width="110" :show-overflow-tooltip="true" :prop="item.prop" :label="item.label"></el-table-column>
+		 <el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名" sortable></el-table-column>
+		 <el-table-column :show-overflow-tooltip="true" prop="Department" label="部门" sortable></el-table-column>
+		 <el-table-column :show-overflow-tooltip="true" prop="Duty" label="职务" sortable></el-table-column>
+			<el-table-column v-for="item in columnList" width="130" sortable :show-overflow-tooltip="true" :prop="item.prop" :label="item.label"></el-table-column>
 			
 		</el-table>
-		<!-- 分页 -->
-		<div class="block pagination">
+		<!-- 分页tableData.slice((currentPage-1)*pageSize,currentPage*pageSize) -->
+		<!--< div class="block pagination">
 			<el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" background
 			 layout="total, prev, pager, next, jumper" :total="tableData.length" :current-page.sync="currentPage"></el-pagination>
-		</div>
+		</div> -->
 
 		<!-- 添加成绩 -->
 		<el-dialog title="添加成绩" top="30vh" append-to-body :visible.sync="equipDialog" width="1000px" class="add-Equip">
@@ -351,7 +351,7 @@
 		mounted() {
 			this.getSubject();
 			this.$nextTick(()=>{
-				this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-130;
+				this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-90;
 			})
 		}
 	};

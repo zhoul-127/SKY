@@ -601,3 +601,9 @@ img {
     pointer-events: none !important;
   }
 }
+.el-pagination__editor.el-input {
+    width: 50px !important;
+}
+.el-pagination__editor.el-input .el-input__inner {
+    width: 40px !important;
+}

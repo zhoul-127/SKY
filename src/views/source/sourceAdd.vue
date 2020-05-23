@@ -44,7 +44,7 @@
 					<el-upload ref="template" class="upload-demo" :before-upload="beforeTemplateUpload" :action="importTemplateUrl"
 					 :on-preview="handleTemplatePreview" :on-remove="handleTemplateRemove" :before-remove="templatebeforeRemove"
 					 :file-list="formData.file" :on-success="templateImportSuccess" :on-error="templateImportError" :limit="1"
-					 :on-exceed="handleTemplateExceed" :on-change="handleTemplatechange" :headers="headers" accept=".xls"
+					 :on-exceed="handleTemplateExceed" :on-change="handleTemplatechange" :headers="headers" accept=".xls,.xlsx"
 					 :disabled="callFlag" :auto-upload="false">
 						<el-button slot="trigger" size="small" height="28px" class="primary-btn" :disabled="callFlag || importFlag">浏览
 						</el-button>
@@ -52,7 +52,7 @@
 						<el-button size="small" height="28px" class="primary-btn template-upload" @click="submitTemplateUpload"
 						 :disabled="callFlag || importFlag">导入
 						</el-button>
-						<el-button size="small" @click="dialogVisible=true" :disabled="callFlag" class="download">下载模板
+						<el-button size="small" @click="downloadDoc" :disabled="callFlag" class="download">下载模板
 						</el-button>
 					</el-upload>
 				</el-form-item>
@@ -60,26 +60,34 @@
 		</el-form>
 		
 		<el-table :data="tableData" style="width: 100%" border class="table-box"
-		 row-key="key" v-loading="loading" :height="tableH">
-			<el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
-			<el-table-column :show-overflow-tooltip="true" prop="Subject" label="科目"></el-table-column>
-			<el-table-column :show-overflow-tooltip="true" prop="SubjectType" label="科目类型"></el-table-column>
-			<el-table-column :show-overflow-tooltip="true" prop="AchieveDate" label="考试时间">
+		 row-key="key" v-loading="loading" :height="tableH"  @sort-change="sortChange">
+			<el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名" sortable="custom"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="Subject" label="科目" sortable="custom"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="SubjectType" label="科目类型" sortable="custom"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="AchieveDate" label="考试时间" sortable="custom">
 				<template slot-scope="scope">
 					<span>{{scope.row.AchieveDate?scope.row.AchieveDate.split('T')[0]:""}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column :show-overflow-tooltip="true" prop="Score" label="得分"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="Score" label="得分" sortable="custom"></el-table-column>
+		
+			<el-table-column label="操作" width="180">
+				<template slot-scope="scope">
+					<el-button size="mini" @click.native="editSource(scope.row)">修改</el-button>
+					<el-button size="mini" @click="deleteSource(scope.row.Guid, scope.$index)" type="danger">删除</el-button>
+					<!-- <el-button size="mini"  @click="jurisdiction(scope.row.id)" type="primary" plain>权限配置</el-button> -->
+				</template>
+			</el-table-column>
 		</el-table>
 		<!-- 分页 -->
 		<div class="block pagination">
 			<el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize" background
-			 layout="total, prev, pager, next, jumper" :total="tableData.length" :current-page.sync="currentPage"></el-pagination>
+			 layout="total, prev, pager, next, jumper" :total="totalCount" :current-page.sync="currentPage"></el-pagination>
 		</div>
 
 		<!-- 添加成绩 -->
-		<el-dialog title="添加成绩" top="30vh" append-to-body :visible.sync="equipDialog" width="1000px" class="add-Equip">
-			<add-source @source="source"></add-source>
+		<el-dialog :title="action+'成绩'" top="30vh" append-to-body :visible.sync="equipDialog" width="1000px" class="add-Equip">
+			<add-source @source="source" :guid="guid"></add-source>
 		</el-dialog>
 	</div>
 </template>
@@ -101,6 +109,8 @@
 		},
 		data() {
 			return {
+				action:"添加",
+				guid:"",
 				tableH:'',
 				formInline:{
 					Name:"",
@@ -150,7 +160,6 @@
 				},
 				fileRefIds: [],
 				arr: [],
-				dialogVisible: false,
 				defaultExpandAll: true,
 				defaultJoinId: [],
 				joinUser: [],
@@ -187,7 +196,8 @@
 				deptNum: 0,
 				positionCode: [],
 				value: "",
-				importTemplateUrl: ""
+				importTemplateUrl: this.$api.url+"/api/Personalscroce/ImportPersonalScoreExcel",
+				sord:""
 			};
 		},
 		methods: {
@@ -229,6 +239,7 @@
 					dateEnd: this.formInline.dateEnd,
 					'pageModel.pageIndex': this.currentPage,
 					'pageModel.pageSize': this.pageSize,
+					orderby:this.sord?this.sord:"",
 				};
 				this.$api.getPageScroces(data).then(res => {
 					this.tableData = res.data;
@@ -240,6 +251,16 @@
 			source(){
 				this.list();
 				this.equipDialog = false;
+			},
+			//下载模板
+			downloadDoc(){
+				const url = this.$api.url+'/template/成绩录入模板.xlsx';
+				const link = document.createElement('a');
+				let fname = '成绩录入模板';
+				link.href = url;
+				link.setAttribute('download', fname);
+				document.body.appendChild(link);
+				link.click();
 			},
 			// 点击导入浏览
 			getTemplate() {
@@ -354,7 +375,42 @@
 			},
 			// 新增按钮跳转
 			addrouter() {
+				this.action = "添加";
+				this.guid = "";
 				this.equipDialog = true;
+			},
+			editSource(row) {
+				this.action = "修改";
+				this.equipDialog = true;
+				this.$nextTick(function(){
+					this.guid = row.Guid;
+				})
+			},
+			// 删除成绩
+			deleteSource(id, index) {
+				this.$confirm('确认删除？')
+					.then(_ => {
+						this.$api.deleteScroces({guid:id}).then(res => {
+							if (res) {
+								this.$message.success('删除成功！')
+								this.list();
+							} else {
+								this.$message.warning('删除失败')
+							}
+						}).catch(err => {
+							console.log(err);
+						})
+					})
+					.catch(_ => {})
+			},
+			//自定义排序
+			sortChange(column, prop, order) {
+				if(column.order == 'ascending'){
+					this.sord = column.prop+' asc';
+				}else if(column.order == 'descending'){
+					this.sord = column.prop+' desc';
+				}
+				this.list();
 			},
 		},
 		mounted() {

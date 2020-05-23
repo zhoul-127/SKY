@@ -77,19 +77,19 @@
 				type: Boolean,
 				default: false
 			},
-			userId: {
+			guid: {
 				type: String,
 				default: ""
 			}
 		},
 		watch: {
-			userId(val) {
+			guid(val) {
 				if (val) {
 					let data = {
-						'Guid': val
+						'guid': val
 					};
 					this.action = '修改'
-					this.$api.getUserId(data).then(res => {
+					this.$api.getScrocesById(data).then(res => {
 						this.addRoleForm = res;
 					}).catch(err => {
 						console.log(err);
@@ -102,19 +102,6 @@
 		},
 		data() {
 			// 验证表单
-			var validateRoleName = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('输入不能为空'))
-				} else {
-					// if (value !== '') {
-					// 	var reg = /^[A-Za-z0-9\u4e00-\u9fa5]{2,18}$/
-					// 	if (!reg.test(value)) {
-					// 		callback(new Error('角色长度为2-18位'))
-					// 	}
-					// }
-					callback()
-				}
-			}
 			var validateRoleFlag = (rule, value, callback) => {
 				if (value === '') {
 					callback(new Error('输入不能为空'))
@@ -199,9 +186,10 @@
 			},
 			// 选择人员跳转
 			addrouter() {
+				if(!this.guid)
 				this.selectP = true;
 			},
-			// 添加角色确定
+			// 添加成绩确定
 			addRoleSave(addRoleForm) {
 				var that = this;
 				this.$refs[addRoleForm].validate(valid => {

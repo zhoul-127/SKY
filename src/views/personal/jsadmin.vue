@@ -26,53 +26,52 @@
 		<!-- 用户添加 -->
 		<add-rolefrom :dialogAddUser.sync="addVisible" :userId="userId"></add-rolefrom>
 		<!-- 表格 -->
-		<el-table ref="multipleTable" :data="tableData"  border  :height="tableH">
-			<el-table-column prop="Name" label="姓名" sortable>
+		<el-table ref="multipleTable" :data="tableData"  border  :height="tableH" @sort-change="sortChange">
+			<el-table-column prop="Name" label="姓名" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Company" label="公司" sortable width="150">
+			<el-table-column prop="Company" label="公司" sortable="custom" width="150">
 			</el-table-column>
-			<el-table-column prop="Department" label="单位" sortable>
+			<el-table-column prop="Department" label="单位" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Level" label="级别" sortable>
+			<el-table-column prop="Level" label="级别" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="BrithDate" label="出生年月" width="110" sortable>
+			<el-table-column prop="BrithDate" label="出生年月" width="110" sortable="custom">
 				<template slot-scope="scope">
 					<span>{{scope.row.BrithDate?scope.row.BrithDate.split('T')[0]:""}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="Age" label="年龄" sortable>
+			<el-table-column prop="Age" label="年龄" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="EnlistedDate" label="入伍年月" width="110" sortable>
+			<el-table-column prop="EnlistedDate" label="入伍年月" width="110" sortable="custom">
 				<template slot-scope="scope">
 					<span>{{scope.row.EnlistedDate?scope.row.EnlistedDate.split('T')[0]:""}}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="PoliticalFace" label="政治面貌" width="110" sortable>
+			<el-table-column prop="PoliticalFace" label="政治面貌" width="110" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Education" label="文化程度" width="110" sortable>
+			<el-table-column prop="Education" label="文化程度" width="110" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Nation" label="民族" sortable>
+			<el-table-column prop="Nation" label="民族" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="NavtivePlace" label="籍贯" sortable>
+			<el-table-column prop="NavtivePlace" label="籍贯" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Height" label="身高" sortable>
+			<el-table-column prop="Height" label="身高" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Weight" label="体重" sortable>
+			<el-table-column prop="Weight" label="体重" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Bust" label="胸围" sortable>
+			<el-table-column prop="Bust" label="胸围" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="Waist" label="腰围" sortable>
+			<el-table-column prop="Waist" label="腰围" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="BMI" label="BMI" sortable>
+			<el-table-column prop="BMI" label="BMI" sortable="custom">
 			</el-table-column>
-			<el-table-column prop="PBF" label="PBF" sortable>
+			<el-table-column prop="PBF" label="PBF" sortable="custom">
 			</el-table-column>
 
 			<el-table-column label="操作" width="180">
 				<template slot-scope="scope">
 					<el-button size="mini" @click.native="editRoleForm(scope.row)">修改</el-button>
 					<el-button size="mini" @click="deleteRole(scope.row.Guid, scope.$index)" type="danger">删除</el-button>
-					<!-- <el-button size="mini"  @click="jurisdiction(scope.row.id)" type="primary" plain>权限配置</el-button> -->
 				</template>
 			</el-table-column>
 		</el-table>
@@ -105,7 +104,8 @@
 				// 默认每页显示的条数（可修改）
 				PageSize: 10,
 				data: [],
-				tableH:''
+				tableH:'',
+				sord:''
 			}
 		},
 		created() {
@@ -130,6 +130,7 @@
 					queryJson: JSON.stringify({
 						"Name": this.formInline.user
 					}),
+					orderby:this.sord?this.sord:"",
 					'pageModel.pageIndex': this.currentPage,
 					'pageModel.pageSize': this.PageSize,
 				};
@@ -144,7 +145,7 @@
 			deleteRole(id, index) {
 				this.$confirm('确认删除？')
 					.then(_ => {
-						this.$api.saveUser({guid:id}).then(res => {
+						this.$api.deleteUser({guid:id}).then(res => {
 							if (res) {
 								this.$message.success('删除成功！')
 								this.roleList();
@@ -191,68 +192,15 @@
 			hidePanel() {
 				this.dialogVisible = false
 			},
-			// 请求接口，获取权限结构数据
-			getMenus(context, arg) {
-				axiosGet('base/api/getRoleApiMenu').then(res => {
-					if (res.code === 200) {
-						this.department = res.data
-						// console.log(res.data)
-					}
-				})
-			},
-			// 获取已勾选权限
-			jurisdiction(id) {
-				var _this = this;
-				this.data = []
-				this.roleId = id
-				this.dialogVisible = true;
-				this.$nextTick(() => {
-					this.$refs.tree.setCheckedKeys([]);
-				})
-
-				axiosGet('base/role/getRoleApi?roleId=' + this.roleId).then(res => {
-					if (res.code === 200) {
-						let arr = []
-						if (res.data.length > 0) {
-							res.data.forEach(item => {
-								arr.push(item.apiId)
-							})
-						}
-						setTimeout(function() {
-							arr.forEach(item => {
-								_this.$refs.tree.setChecked(item, true, false);
-							})
-
-						}, 500)
-						// this.$refs.tree.setCheckedNodes(arr);
-						// this.$refs.tree.setCheckedKeys(arr, false)
-					}
-				})
-			},
-			// 选择权限-确定
-			departmentOk() {
-				this.jurisd = [];
-				// console.log(this.$refs.tree.getCheckedKeys(), this.$refs.tree.getHalfCheckedKeys())
-				let selectedNodes = this.$refs.tree.getCheckedKeys();
-				let halfSelectedNodes = this.$refs.tree.getHalfCheckedKeys();
-				this.jurisd = [...selectedNodes, ...halfSelectedNodes]
-				if (!this.jurisd.length) {
-					this.$message.warning('至少需要一个配置项');
-					return;
+			//自定义排序
+			sortChange(column, prop, order) {
+				if(column.order == 'ascending'){
+					this.sord = column.prop+' asc';
+				}else if(column.order == 'descending'){
+					this.sord = column.prop+' desc';
 				}
-				axiosPost('base/role/add-apis', {
-					roleId: this.roleId,
-					apiIds: this.jurisd
-				}).then(result => {
-					if (result.code === 200) {
-						this.$message('配置成功')
-						// 关闭弹窗
-						this.hidePanel()
-					} else {
-						result.data.length > 0 ? this.$message.warning(result.data[0]) : this.$message.warning(result.message)
-					}
-				})
-			}
+				this.roleList();
+			},
 		}
 	}
 </script>

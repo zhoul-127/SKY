@@ -11,7 +11,7 @@
 						<el-menu-item :index="''+ ++index" v-if="!item.hasChildren" @click="toPath(item.apiUrl)">
 							{{item.name}}
 						</el-menu-item>
-						<el-submenu v-if="item.hasChildren">
+						<el-submenu index="1" v-if="item.hasChildren">
 							<template slot="title">{{item.name}}</template>
 							<el-menu-item  :index="''+ ++index" v-for="(item2, index2) in item.children"  @click="toPath(item2.apiUrl)">
 								{{item2.name}}
@@ -96,7 +96,7 @@
 		mounted(){
 			var self = this;
 			let menus = this.headerMenus;
-			if (menus) {
+			if (menus&&menus.length>0) {
 			  menus.forEach((item, index) => {
 			    if (item.hasChildren) {
 			      item.children.forEach(v2 => {

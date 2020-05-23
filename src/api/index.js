@@ -20,6 +20,7 @@ import request from '@/axios/request'
 //let Intranet = `http://39.99.173.172:8082/api`;
 let Intranet = `/api`;
 const api = {
+	url:"http://39.99.173.172:8082",
 	getToken(data) {
 		return request({
 			url: `${Intranet}/sso/GetToken`,
@@ -90,6 +91,20 @@ const api = {
 			params: data
 		})
 	},
+	getScrocesById(data) {
+		return request({
+			url: `${Intranet}/Personalscroce/GetById`,
+			method: 'get',
+			params: data
+		})
+	},
+	deleteScroces(data) {
+		return request({
+			url: `${Intranet}/Personalscroce/Delete`,
+			method: 'post',
+			params: data
+		})
+	},
 	getPageScroces(data) {
 		return request({
 			url: `${Intranet}/Personalscroce/GetPageScroces`,
@@ -104,11 +119,12 @@ const api = {
 			params: data
 		})
 	},
-	importSource(){
+	downloadDoc(){
 		return request({
-			url: `${Intranet}/Personalfiles/ImportPersonalfileExcel`,
-			method: 'post',
-			params: data
+			url: ``,
+			method: 'get',
+			//responseType: 'blob'
+			//params: data
 		})
 	},
 
