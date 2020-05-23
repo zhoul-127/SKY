@@ -138,47 +138,50 @@
 				</div>
 				<div class="middle-c">
 					<div class="middle-c-t boxall">
-						<el-form>
-							<el-form-item label="科目:" prop="subject">
-								<el-select
-									style="display: inline-block;width: 202px"
-									class="yanshiZiJi"
-									@change="getSubjectType"
-									v-model="SubjectGuid"
-									filterable
-									placeholder="请选择"
-								  >
-									<el-option
-									  v-for="item in Subject"
-									  :key="item.Guid"
-									  :label="item.SubjectName"
-									  :value="item.Guid"
-									></el-option>
-								  </el-select>
-							</el-form-item>
-						</el-form>
-						<table width="100%" border="0" class="table" cellpadding="0" cellspacing="0">
-							<tr>
-								<th class="th_border">日期</th>
-								<th class="th_border">成绩</th>
-								<th class="th_border">评定</th>
-								<th class="th_border">排名</th>
-								<th class="th_border">单次进步分数</th>
-								<th class="th_border">单次进步名次</th>
-								<th class="th_border">年度进步分数</th>
-								<th class="">年度进步名次</th>
-							</tr>
-							<tr v-for="(item,index) in dataSport" :key="index">
-								<td>{{item.AchieveDate?item.AchieveDate.split("T")[0]:""}}</td>
-								<td>{{item.Score}}</td>
-								<td>{{item.Evaluate}}</td>
-								<td>{{item.Rank}}</td>
-								<td>{{item.CurrentProScore}}</td>
-								<td>{{item.CurrentProRank}}</td>
-								<td>{{item.YearProScore}}</td>
-								<td>{{item.YearProRank}}</td>
-							</tr>
-						</table>
+						<div class="kemsz">
+							<el-form style="position: static;margin-top: 8px;">
+								<el-form-item label="科目:" prop="subject" style="margin-bottom: 8px;">
+									<el-select
+										style="display: inline-block;width: 202px"
+										class="yanshiZiJi"
+										@change="getSubjectType"
+										v-model="SubjectGuid"
+										filterable
+										placeholder="请选择"
+									  >
+										<el-option
+										  v-for="item in Subject"
+										  :key="item.Guid"
+										  :label="item.SubjectName"
+										  :value="item.Guid"
+										></el-option>
+									  </el-select>
+								</el-form-item>
+							</el-form>
+							<table width="100%" border="0" class="table" cellpadding="0" cellspacing="0">
+								<tr>
+									<th class="th_border">日期</th>
+									<th class="th_border">成绩</th>
+									<th class="th_border">评定</th>
+									<th class="th_border">排名</th>
+									<th class="th_border">单次进步分数</th>
+									<th class="th_border">单次进步名次</th>
+									<th class="th_border">年度进步分数</th>
+									<th class="">年度进步名次</th>
+								</tr>
+								<tr v-for="(item,index) in dataSport" :key="index">
+									<td>{{item.AchieveDate?item.AchieveDate.split("T")[0]:""}}</td>
+									<td>{{item.Score}}</td>
+									<td>{{item.Evaluate}}</td>
+									<td>{{item.Rank}}</td>
+									<td>{{item.CurrentProScore}}</td>
+									<td>{{item.CurrentProRank}}</td>
+									<td>{{item.YearProScore}}</td>
+									<td>{{item.YearProRank}}</td>
+								</tr>
+							</table>
+						</div>
+						
 						<div class="boxfoot"></div>
 					</div>
 					<div class="middle-c-m boxall">
@@ -891,9 +894,11 @@
 				.middle-c-t {
 					height: calc(33.33% - 10px);
 					margin: 0 0 10px;
-					overflow-y: auto;
-					overflow-x: hidden;
-
+					.kemsz{
+						height:100%;
+						overflow-y: auto;
+						overflow-x: hidden;
+					}
 					.table {
 						border-collapse: collapse;
 						font-size: 13px;
@@ -901,7 +906,6 @@
 						line-height: 30px;
 						color: #09F;
 						text-align: center;
-						margin-top:45px;
 					}
 
 					.table tr th {
@@ -951,6 +955,11 @@
 		}
 	}
 
+	@media (max-width: 1500px) {
+		.main{
+			font-size:10px;
+		}
+	}
 	.boxall {
 		position: relative;
 		border: 1px solid rgba(37, 232, 175, 0.17);
