@@ -36,18 +36,40 @@
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click="list" icon="el-icon-search" size="mini">搜索</el-button>
-				<!-- <el-button type="primary" @click="addrouter" icon="el-icon-edit" size="mini">添加</el-button> -->
+				<el-button type="primary" @click="addrouter" icon="el-icon-edit" size="mini">添加</el-button>
 			</el-form-item>
+			</div>
+			<div>
+				<el-form-item label="选择文件" class="select-file">
+					<el-upload ref="template" class="upload-demo" :before-upload="beforeTemplateUpload" :action="importTemplateUrl"
+					 :on-preview="handleTemplatePreview" :on-remove="handleTemplateRemove" :before-remove="templatebeforeRemove"
+					 :file-list="formData.file" :on-success="templateImportSuccess" :on-error="templateImportError" :limit="1"
+					 :on-exceed="handleTemplateExceed" :on-change="handleTemplatechange" :headers="headers" accept=".xls"
+					 :disabled="callFlag" :auto-upload="false">
+						<el-button slot="trigger" size="small" height="28px" class="primary-btn" :disabled="callFlag || importFlag">浏览
+						</el-button>
+						
+						<el-button size="small" height="28px" class="primary-btn template-upload" @click="submitTemplateUpload"
+						 :disabled="callFlag || importFlag">导入
+						</el-button>
+						<el-button size="small" @click="dialogVisible=true" :disabled="callFlag" class="download">下载模板
+						</el-button>
+					</el-upload>
+				</el-form-item>
 			</div>
 		</el-form>
 		
-		<el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" border class="table-box"
+		<el-table :data="tableData" style="width: 100%" border class="table-box"
 		 row-key="key" v-loading="loading" :height="tableH">
-		 <el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
-		 <el-table-column :show-overflow-tooltip="true" prop="Department" label="部门"></el-table-column>
-		 <el-table-column :show-overflow-tooltip="true" prop="Duty" label="职务"></el-table-column>
-			<el-table-column v-for="item in columnList" width="110" :show-overflow-tooltip="true" :prop="item.prop" :label="item.label"></el-table-column>
-			
+			<el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="Subject" label="科目"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="SubjectType" label="科目类型"></el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="AchieveDate" label="考试时间">
+				<template slot-scope="scope">
+					<span>{{scope.row.AchieveDate?scope.row.AchieveDate.split('T')[0]:""}}</span>
+				</template>
+			</el-table-column>
+			<el-table-column :show-overflow-tooltip="true" prop="Score" label="得分"></el-table-column>
 		</el-table>
 		<!-- 分页 -->
 		<div class="block pagination">
@@ -79,7 +101,6 @@
 		},
 		data() {
 			return {
-				columnList:[],
 				tableH:'',
 				formInline:{
 					Name:"",
@@ -206,24 +227,12 @@
 					subject: this.formInline.subject,
 					dateBegin: this.formInline.dateBegin,
 					dateEnd: this.formInline.dateEnd,
+					'pageModel.pageIndex': this.currentPage,
+					'pageModel.pageSize': this.pageSize,
 				};
-				this.$api.getScroces(data).then(res => {
-					this.tableData = [];
-					this.columnList = [];
-					for(var i=0;i<res.length;i++){
-						var dataObj = res[i].Name;
-						for(var j=0;j<res[i].Value.length;j++){
-							if(i == 0){
-							var obj = {
-								prop:'Date'+j,
-								label:res[i].Value[j].Date.split("T")[0],
-								}
-							this.columnList.push(obj);
-							}
-							dataObj['Date'+j] = res[i].Value[j].Score;
-						}
-						this.tableData.push(dataObj);
-					}
+				this.$api.getPageScroces(data).then(res => {
+					this.tableData = res.data;
+					this.totalCount = res.pageModel.PageCount;
 				}).catch(err => {
 					console.log(err);
 				})

@@ -6,6 +6,7 @@ import jsadmin from '@/views/personal/jsadmin.vue'
 import login from '@/views/login/login.vue'
 import index from '@/views/index.vue'
 import source from '@/views/source/source.vue'
+import sourceAdd from '@/views/source/sourceAdd.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -37,7 +38,12 @@ const router = new Router({
 		    path: '/source',
 		    name: 'source',
 		    component: source
-		  }
+		  },
+		  {
+		    path: '/sourceAdd',
+		    name: 'sourceAdd',
+		    component: sourceAdd
+		  },
 	  ]
     },
   ]

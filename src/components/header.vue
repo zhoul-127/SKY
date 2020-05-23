@@ -6,9 +6,19 @@
 					<img src="@/assets/images/login-logo.png" alt="">
 				</h1>
 				<el-menu :default-active="activeIndex" class="el-menu-demo header-menu" mode="horizontal">
-					<el-menu-item :index="''+ ++index" v-for="(item,index) in headerMenus" :key="index" @click="toPath(item.apiUrl)">
-						{{item.name}}
-					</el-menu-item>
+
+					<template v-for="(item,index) in headerMenus" >
+						<el-menu-item :index="''+ ++index" v-if="!item.hasChildren" @click="toPath(item.apiUrl)">
+							{{item.name}}
+						</el-menu-item>
+						<el-submenu v-if="item.hasChildren">
+							<template slot="title">{{item.name}}</template>
+							<el-menu-item  :index="''+ ++index" v-for="(item2, index2) in item.children"  @click="toPath(item2.apiUrl)">
+								{{item2.name}}
+							</el-menu-item>
+						</el-submenu>
+					</template>
+
 				</el-menu>
 			</div>
 			<ul class="operation">
@@ -40,46 +50,68 @@
 	</div>
 </template>
 <script>
-import router from '../router/index'
+	import router from '../router/index'
 	export default {
 		data() {
 			return {
 				headerMenus: [{
 					apiUrl: "jsadmin",
-					childMenu: [],
-					createTime: "2019-07-10T15:15:57",
-					cssClass: "el-icon-notebook-2",
-					id: "ASSET1E0-0002-0001-0001-000100000000",
-					isMenu: false,
 					name: "用户管理",
-					parentId: "ASSET1E0-0002-0001-0001-000000000000",
-					sortNum: 1,
-					status: 1
+					hasChildren:false,
+					children: [],
 				}, {
-					apiUrl: "source",
-					childMenu: [],
-					createTime: "2019-07-10T15:15:57",
-					cssClass: "el-icon-notebook-2",
-					id: "ASSET1E0-0002-0001-0001-000100000000",
+					apiUrl: "",
 					name: "成绩管理",
-					parentId: "ASSET1E0-0002-0001-0001-000000000000",
-					sortNum: 1,
-					status: 1
+					hasChildren:true,
+					children: [
+						{
+							apiUrl: "sourceAdd",
+							name: "成绩录入",
+							hasChildren:false,
+							children: [],
+						},
+						{
+							apiUrl: "source",
+							name: "成绩汇总",
+							hasChildren:false,
+							children: [],
+						}
+					],
 				}],
-				activeIndex: '1',
+				activeIndex: "1",
 				username: null,
 				dialogVisible: false,
-				user:{
-					UserName:""
+				user: {
+					UserName: ""
 				}
 			}
 		},
 		created() {
-			if(localStorage.getItem('user')){
+			if (localStorage.getItem('user')) {
 				this.user = JSON.parse(localStorage.getItem('user'));
-			}else{
+			} else {
 				router.push('/login')
 			}
+		},
+		mounted(){
+			var self = this;
+			let menus = this.headerMenus;
+			if (menus) {
+			  menus.forEach((item, index) => {
+			    if (item.hasChildren) {
+			      item.children.forEach(v2 => {
+			        if ('/' + item.apiUrl === self.$route.path || '/' + v2.apiUrl === self.$route.path) {
+			          self.activeIndex = index+ 1+"";
+			        }
+			      })
+			    }
+			  })
+			}
+		},
+		watch: {
+		  '$route.path': function (newVal) {
+			  
+		  }
 		},
 		methods: {
 			loginout() {
@@ -88,9 +120,6 @@ import router from '../router/index'
 				localStorage.removeItem('token')
 				localStorage.removeItem('user')
 				localStorage.removeItem('routes')
-				localStorage.removeItem('menus')
-				localStorage.removeItem('jurisd')
-				localStorage.removeItem('firstLogin')
 				// 2. 跳转到登录页面
 				this.$router.push({
 					path: '/login'
@@ -107,7 +136,6 @@ import router from '../router/index'
 			}
 		},
 	}
-
 </script>
 
 <style lang="scss">
@@ -124,25 +152,29 @@ import router from '../router/index'
 		border-bottom: 4px solid #DF8003 !important;
 		color: #fff !important;
 	}
-
+		.el-submenu.is-active .el-submenu__title {
+			border-bottom: 4px #DF8003 solid !important;
+		}
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
 		color: #fff !important;
 	}
 
-	.el-menu--horizontal>.el-menu-item {
-		height: 80px !important;
-		line-height: 80px !important;
-	}
 
 	.header-menu {
-		.el-menu-item {
+		.el-menu-item,.el-submenu__title {
 			padding: 0 !important;
 			margin: 0 20px !important;
 			font-size: 16px !important;
 			background: #3b93ec !important;
 			color: #fff !important;
+			height: 80px !important;
+			line-height: 80px !important;
+			box-shadow: none !important;
 		}
+	}
+	.el-submenu__title i {
+	    color: #fff !important;
 	}
 
 	.top-login {

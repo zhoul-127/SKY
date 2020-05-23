@@ -90,6 +90,13 @@ const api = {
 			params: data
 		})
 	},
+	getPageScroces(data) {
+		return request({
+			url: `${Intranet}/Personalscroce/GetPageScroces`,
+			method: 'get',
+			params: data
+		})
+	},
 	getLatesd(data) {
 		return request({
 			url: `${Intranet}/Personalscroce/GetLatestAchiveDate`,
