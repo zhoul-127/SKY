@@ -11,9 +11,9 @@
 						<el-menu-item :index="''+ ++index" v-if="!item.hasChildren" @click="toPath(item.apiUrl)">
 							{{item.name}}
 						</el-menu-item>
-						<el-submenu index="1" v-if="item.hasChildren">
+						<el-submenu :index="''+ ++index" v-if="item.hasChildren">
 							<template slot="title">{{item.name}}</template>
-							<el-menu-item  :index="''+ ++index" v-for="(item2, index2) in item.children"  @click="toPath(item2.apiUrl)">
+							<el-menu-item  :index="''+ ++index+'-'+index2" v-for="(item2, index2) in item.children"  @click="toPath(item2.apiUrl)">
 								{{item2.name}}
 							</el-menu-item>
 						</el-submenu>
@@ -77,6 +77,11 @@
 							children: [],
 						}
 					],
+				},{
+					apiUrl: "scoreAnalysis",
+					name: "成绩分析",
+					hasChildren:false,
+					children: [],
 				}],
 				activeIndex: "1",
 				username: null,
@@ -104,7 +109,11 @@
 			          self.activeIndex = index+ 1+"";
 			        }
 			      })
-			    }
+			    }else{
+					if ('/' + item.apiUrl === self.$route.path ) {
+					  self.activeIndex = index+ 1+"";
+					}
+				}
 			  })
 			}
 		},
@@ -166,7 +175,7 @@
 			padding: 0 !important;
 			margin: 0 20px !important;
 			font-size: 16px !important;
-			background: #3b93ec !important;
+			background: #0f1a4a !important;
 			color: #fff !important;
 			height: 80px !important;
 			line-height: 80px !important;

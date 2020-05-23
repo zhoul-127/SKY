@@ -1,4 +1,7 @@
 <style lang="scss" scoped>
+	.jsadmin{
+		padding:20px 15px;
+	}
 	.jur-dialog /deep/ .el-dialog__body {
   height: 450px;
   overflow: auto;
@@ -32,6 +35,8 @@
 			<el-table-column prop="Company" label="公司" sortable="custom" width="150">
 			</el-table-column>
 			<el-table-column prop="Department" label="单位" sortable="custom">
+			</el-table-column>
+			<el-table-column prop="Duty" label="职务" sortable="custom">
 			</el-table-column>
 			<el-table-column prop="Level" label="级别" sortable="custom">
 			</el-table-column>

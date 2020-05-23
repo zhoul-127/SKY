@@ -11,6 +11,7 @@ import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
 import Print from 'vue-print-nb'
+import echarts from 'echarts'
 import { loadScript } from 'esri-loader'
 import api from './api'
 
@@ -19,6 +20,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.prototype.$api=api;
+Vue.prototype.$echarts = echarts
 import './assets/css/base.scss'
 import './assets/iconfont/iconfont.css'
 Vue.use(ElementUI)

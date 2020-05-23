@@ -119,14 +119,45 @@ const api = {
 			params: data
 		})
 	},
-	downloadDoc(){
+	//成绩分析
+	getPersonAnalysisInfo(data) {
 		return request({
-			url: ``,
+			url: `${Intranet}/personalAnalysis/GetPersonAnalysisInfo`,
 			method: 'get',
-			//responseType: 'blob'
-			//params: data
+			params: data
 		})
 	},
-
+	//随机获取人员Personalfiles/GetRandomPersonalfile
+	GetRandomPersonalfile(data) {
+		return request({
+			url: `${Intranet}/Personalfiles/GetRandomPersonalfile`,
+			method: 'get',
+			params: data
+		})
+	},
+	//排名
+	GetLatesRank(data) {
+		return request({
+			url: `${Intranet}/personalAnalysis/GetLatesRank`,
+			method: 'get',
+			params: data
+		})
+	},
+	//运动记录
+	GetSportRecord(data) {
+		return request({
+			url: `${Intranet}/personalAnalysis/GetSportRecord`,
+			method: 'get',
+			params: data
+		})
+	},
+	//单科成绩
+	GetSubjectAchive(data) {
+		return request({
+			url: `${Intranet}/personalAnalysis/GetSubjectAchive`,
+			method: 'get',
+			params: data
+		})
+	},
 };
 export default api;

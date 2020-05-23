@@ -422,14 +422,10 @@
 	};
 </script>
 <style lang="scss">
-	// .bgBian:hover {
-	//   background: #ccc;
-	// }
-
-	// .bgBian {
-	//   padding-left: 10px;
-	//   cursor: pointer;
-	// }
+	
+	.common-table{
+			padding:20px 15px;
+		}
 
 	.internal-change {
 		.add-Equip /deep/ .el-input__inner {

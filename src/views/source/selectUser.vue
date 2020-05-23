@@ -73,7 +73,7 @@
 			</el-pagination>
     </div>
     <div class="el-form-item btn-group center">
-      <el-button type="primary" @click="routeOk" size="small">添加</el-button>
+      <el-button type="primary" @click="routeOk" size="small">确定</el-button>
     </div>
   </div>
 </template>

@@ -58,7 +58,7 @@ export default {
   );
   .el-main {
     // margin: 0 30px 80px 0;
-	padding: 20px 15px;
+	padding: 0;
     background: #fff;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     .main-view {
@@ -67,7 +67,7 @@ export default {
     }
   }
   .el-header {
-    background: #3b93ec;
+    background: #0f1a4a;
     padding: 0;
     overflow: hidden;
     color: #fff;
