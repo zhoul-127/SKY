@@ -7,13 +7,13 @@
 				</h1>
 				<el-menu :default-active="activeIndex" class="el-menu-demo header-menu" mode="horizontal">
 
-					<template v-for="(item,index) in headerMenus" >
+					<template v-for="(item,index) in headerMenus">
 						<el-menu-item :index="''+ ++index" v-if="!item.hasChildren" @click="toPath(item.apiUrl)">
 							{{item.name}}
 						</el-menu-item>
 						<el-submenu :index="''+ ++index" v-if="item.hasChildren">
 							<template slot="title">{{item.name}}</template>
-							<el-menu-item  :index="''+ ++index+'-'+index2" v-for="(item2, index2) in item.children"  @click="toPath(item2.apiUrl)">
+							<el-menu-item :index="'-'+index2" v-for="(item2, index2) in item.children" @click="toPath(item2.apiUrl)">
 								{{item2.name}}
 							</el-menu-item>
 						</el-submenu>
@@ -55,39 +55,40 @@
 		data() {
 			return {
 				headerMenus: [{
-					apiUrl: "jsadmin",
-					name: "用户管理",
-					hasChildren:false,
-					children: [],
-				}, {
-					apiUrl: "",
-					name: "成绩管理",
-					hasChildren:true,
-					children: [
-						{
-							apiUrl: "sourceAdd",
-							name: "成绩录入",
-							hasChildren:false,
-							children: [],
-						},
-						{
-							apiUrl: "source",
-							name: "成绩汇总",
-							hasChildren:false,
-							children: [],
-						}
-					],
-				},{
-					apiUrl: "scoreAnalysis",
-					name: "成绩分析",
-					hasChildren:false,
-					children: [],
-				},{
-					apiUrl: "fitnessAnalysis",
-					name: "体能分析",
-					hasChildren:false,
-					children: [],
-				}],
+						apiUrl: "jsadmin",
+						name: "用户管理",
+						hasChildren: false,
+						children: [],
+					}, {
+						apiUrl: "",
+						name: "成绩管理",
+						hasChildren: true,
+						children: [{
+								apiUrl: "sourceAdd",
+								name: "成绩录入",
+								hasChildren: false,
+								children: [],
+							},
+							{
+								apiUrl: "source",
+								name: "成绩汇总",
+								hasChildren: false,
+								children: [],
+							}
+						],
+					},
+					{
+						apiUrl: "scoreAnalysis",
+						name: "成绩分析",
+						hasChildren: false,
+						children: [],
+					}, {
+						apiUrl: "fitnessAnalysis",
+						name: "体能分析",
+						hasChildren: false,
+						children: [],
+					},
+				],
 				activeIndex: "1",
 				username: null,
 				dialogVisible: false,
@@ -103,29 +104,29 @@
 				router.push('/login')
 			}
 		},
-		mounted(){
+		mounted() {
 			var self = this;
 			let menus = this.headerMenus;
-			if (menus&&menus.length>0) {
-			  menus.forEach((item, index) => {
-			    if (item.hasChildren) {
-			      item.children.forEach(v2 => {
-			        if ('/' + item.apiUrl === self.$route.path || '/' + v2.apiUrl === self.$route.path) {
-			          self.activeIndex = index+ 1+"";
-			        }
-			      })
-			    }else{
-					if ('/' + item.apiUrl === self.$route.path ) {
-					  self.activeIndex = index+ 1+"";
+			if (menus && menus.length > 0) {
+				menus.forEach((item, index) => {
+					if (item.hasChildren) {
+						item.children.forEach((v2, z2) => {
+							if ('/' + v2.apiUrl === self.$route.path) {
+								self.activeIndex = "-" + z2;
+							}
+						})
+					} else {
+						if ('/' + item.apiUrl === self.$route.path) {
+							self.activeIndex = index + 1 + "";
+						}
 					}
-				}
-			  })
+				})
 			}
 		},
 		watch: {
-		  '$route.path': function (newVal) {
-			  
-		  }
+			'$route.path': function(newVal) {
+
+			}
 		},
 		methods: {
 			loginout() {
@@ -162,24 +163,45 @@
 		border-bottom: none !important;
 	}
 
+	// .el-submenu__title i {
+	// 	color: #fff !important;
+	// }
+
 	.el-menu--horizontal>.el-menu-item.is-active {
 		border-bottom: 4px solid #DF8003 !important;
-		color: #fff !important;
+		color: #EE5050 !important;
 	}
-		.el-submenu.is-active .el-submenu__title {
-			border-bottom: 4px #DF8003 solid !important;
-		}
+
+	.el-submenu.is-active .el-submenu__title {
+		border-bottom: 4px #DF8003 solid !important;
+		color: #EE5050 !important;
+	}
+
+	.el-submenu.is-active .el-submenu__title i {
+		color: #EE5050 !important;
+	}
+
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
 		color: #EE5050 !important;
 	}
-	.el-submenu .el-submenu__title:hover,.el-submenu .el-submenu__title:focus, {
+
+	.el-submenu .el-submenu__title:hover,
+	.el-submenu .el-submenu__title:focus,
+		{
+		color: #EE5050 !important;
+	}
+
+	.el-submenu .el-submenu__title i:hover,
+	.el-submenu .el-submenu__title i:focus {
 		color: #EE5050 !important;
 	}
 
 
 	.header-menu {
-		.el-menu-item,.el-submenu__title {
+
+		.el-menu-item,
+		.el-submenu__title {
 			padding: 0 !important;
 			margin: 0 20px !important;
 			font-size: 16px !important;
@@ -189,9 +211,6 @@
 			line-height: 80px !important;
 			box-shadow: none !important;
 		}
-	}
-	.el-submenu__title i {
-	    color: #fff !important;
 	}
 
 	.top-login {

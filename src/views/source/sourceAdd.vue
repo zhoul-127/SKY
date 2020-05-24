@@ -231,31 +231,6 @@
 				this.list();
 			},
 
-			// 选择模板
-			handleCheckedTemplates(value) {
-				var _this = this;
-				_this.checkedtemplates = value;
-			},
-
-			// 选择单个模板进行下载
-			getClickedTemplate(value) {
-				var _this = this;
-				if (_this.templateList.length > 0) {
-					var url = _this.templateList[0].url;
-				}
-				var loading = this.$loading({
-					lock: true,
-					text: "下载中，请稍后...",
-					background: "rgba(0, 0, 0, 0.7)"
-				});
-				axiosGet(url).then(result => {
-					if (result.code == 200) {
-						window.location.href = _this.constApi + result.data;
-						loading.close();
-					}
-				});
-			},
-
 			handleTemplatePreview(file) {
 
 			},
@@ -276,7 +251,7 @@
 			beforeTemplateUpload(file) {
 				this.loadingTrue = this.$loading({
 					lock: true,
-					text: "正在导入，请稍后...",
+					text: "正在导入，请稍候...",
 					background: "rgba(0, 0, 0, 0.7)"
 				});
 			},

@@ -249,7 +249,7 @@
 			beforeTemplateUpload(file) {
 				this.loadingTrue = this.$loading({
 					lock: true,
-					text: "正在导入，请稍后...",
+					text: "正在导入，请稍候...",
 					background: "rgba(0, 0, 0, 0.7)"
 				});
 			},

@@ -304,7 +304,7 @@
 			GetSportRecord() {
 				var loading = this.$loading({
 					lock: true,
-					text: "分析中，请稍后...",
+					text: "分析中，请稍候...",
 					background: "rgba(0, 0, 0, 0.7)"
 				});
 				let data = {
