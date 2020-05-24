@@ -17,11 +17,8 @@
   </div>
 </template>
 <script>
-// import { getmenus } from '@/api/index.js'
-import aside from "@/components/aside.vue";
 import header from "@/components/header.vue";
  import jsadmin from "@/views/personal/jsadmin.vue";
- import source from '@/views/source/source.vue';
 export default {
   data() {
     return {
@@ -32,10 +29,8 @@ export default {
     };
   },
   components: {
-    "aside-menu": aside,
     "header-top": header,
     jsadmin: jsadmin,
-    source: source,
   },
   methods: {
   },

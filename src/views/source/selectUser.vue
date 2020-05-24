@@ -50,7 +50,7 @@
       </el-table-column>
      <el-table-column prop="Name" label="姓名" sortable>
      </el-table-column>
-     <el-table-column prop="Company" label="公司" sortable width="120">
+     <el-table-column prop="Company" label="公司" sortable width="150">
      </el-table-column>
      <el-table-column prop="Department" label="单位" sortable>
      </el-table-column>
@@ -300,7 +300,7 @@ export default {
     }
 
     .el-form-item {
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
 
     .el-textarea {
@@ -339,23 +339,6 @@ export default {
       top: 0;
     }
 
-    .addDia {
-      .el-input {
-        display: block;
-        width: 230px;
-      }
-
-      .el-input__inner {
-        margin: 2px 0;
-        width: 202px;
-      }
-
-      .el-dialog__body {
-        height: 330px;
-        overflow-y: auto;
-      }
-    }
-
     .addInput {
       color: #26a2ff;
       cursor: pointer;
@@ -365,4 +348,10 @@ export default {
       width: 50px;
     }
   }
+  /deep/.el-form-item__label{
+	  color:#606266 !important;
+  }
+	/deep/.el-dialog__body {
+		  padding:0 !important;
+	  }
 </style>

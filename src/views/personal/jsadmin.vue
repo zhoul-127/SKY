@@ -29,7 +29,7 @@
 		<!-- 用户添加 -->
 		<add-rolefrom :dialogAddUser.sync="addVisible" :userId="userId"></add-rolefrom>
 		<!-- 表格 -->
-		<el-table ref="multipleTable" :data="tableData"  border  :height="tableH" @sort-change="sortChange">
+		<el-table ref="multipleTable" v-if="tableRefresh" :data="tableData"  border  :height="tableH" @sort-change="sortChange">
 			<el-table-column prop="Name" label="姓名" sortable="custom">
 			</el-table-column>
 			<el-table-column prop="Company" label="公司" sortable="custom" width="150">
@@ -109,15 +109,13 @@
 				// 默认每页显示的条数（可修改）
 				PageSize: 10,
 				data: [],
-				tableH:'',
-				sord:''
+				tableH:'400',
+				sord:'',
+				tableRefresh:true,
 			}
 		},
 		created() {
 			this.roleList();
-			this.$nextTick(()=>{
-				this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-130;
-			})
 		},
 		components: {
 			'add-rolefrom': addRoleForm,
@@ -131,6 +129,11 @@
 			},
 			// 角色列表
 			roleList() {
+				this.tableRefresh = false;
+				this.$nextTick(()=>{
+					this.tableRefresh = true;
+					this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-130;
+				})
 				let data = {
 					queryJson: JSON.stringify({
 						"Name": this.formInline.user

@@ -82,6 +82,11 @@
 					name: "成绩分析",
 					hasChildren:false,
 					children: [],
+				},{
+					apiUrl: "fitnessAnalysis",
+					name: "体能分析",
+					hasChildren:false,
+					children: [],
 				}],
 				activeIndex: "1",
 				username: null,

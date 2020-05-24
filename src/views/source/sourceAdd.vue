@@ -59,7 +59,7 @@
 			</div>
 		</el-form>
 		
-		<el-table :data="tableData" style="width: 100%" border class="table-box"
+		<el-table v-if="tableRefresh" :data="tableData" style="width: 100%" border class="table-box"
 		 row-key="key" v-loading="loading" :height="tableH"  @sort-change="sortChange">
 			<el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名" sortable="custom"></el-table-column>
 			<el-table-column :show-overflow-tooltip="true" prop="Subject" label="科目" sortable="custom"></el-table-column>
@@ -111,9 +111,12 @@
 			return {
 				action:"添加",
 				guid:"",
-				tableH:'',
+				tableH:'400',
 				formInline:{
 					Name:"",
+					dateBegin: new Date(),
+					dateEnd: new Date(),
+					subject:""
 				},
 				Subject:[],
 				loadingTrue: "", // loading框
@@ -197,12 +200,13 @@
 				positionCode: [],
 				value: "",
 				importTemplateUrl: this.$api.url+"/api/Personalscroce/ImportPersonalScoreExcel",
-				sord:""
+				sord:"",
+				tableRefresh:true
 			};
 		},
 		methods: {
 			getSubjectType(guid){
-				this.$forceUpdate();
+				//this.$forceUpdate();
 			},
 			//获取科目信息
 			getSubject(){
@@ -230,6 +234,18 @@
 			},
 			//获取成绩信息
 			list() {
+				this.tableRefresh = false;
+				this.$nextTick(()=>{
+					this.tableRefresh = true;
+					this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-130;
+				})
+				if(!this.formInline.dateBegin ||!this.formInline.dateEnd){
+						this.$message({
+							message: "请先选择考试时间！",
+							type: "warning"
+						});
+						return;
+				}
 				let data = {
 					pid: "",
 					name: this.formInline.name,
@@ -415,9 +431,6 @@
 		},
 		mounted() {
 			this.getSubject();
-			this.$nextTick(()=>{
-				this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-130;
-			})
 		}
 	};
 </script>

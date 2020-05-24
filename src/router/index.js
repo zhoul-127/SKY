@@ -8,6 +8,7 @@ import index from '@/views/index.vue'
 import source from '@/views/source/source.vue'
 import sourceAdd from '@/views/source/sourceAdd.vue'
 import scoreAnalysis from '@/views/scoreAnalysis/scoreAnalysis.vue'
+import fitnessAnalysis from '@/views/fitnessAnalysis/fitnessAnalysis.vue'
 Vue.use(Router)
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -49,6 +50,11 @@ const router = new Router({
 		    path: '/scoreAnalysis',
 		    name: 'scoreAnalysis',
 		    component: scoreAnalysis
+		  },
+		  {
+		    path: '/fitnessAnalysis',
+		    name: 'fitnessAnalysis',
+		    component: fitnessAnalysis
 		  }
 	  ]
     },

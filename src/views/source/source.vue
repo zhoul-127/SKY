@@ -27,11 +27,11 @@
 					  </el-select>
 				</el-form-item>
 			<el-form-item label="考试开始时间:" prop="dateBegin">
-				<el-date-picker v-model="formInline.dateBegin" type="date" placeholder="选择日期">
+				<el-date-picker v-model="formInline.dateBegin" @change="getSubjectType"  placeholder="选择日期">
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item label="考试结束时间:"  prop="dateEnd">
-				<el-date-picker v-model="formInline.dateEnd" type="date" placeholder="选择日期">
+				<el-date-picker v-model="formInline.dateEnd" @change="getSubjectType" type="date" placeholder="选择日期">
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item>
@@ -41,8 +41,8 @@
 			</div>
 		</el-form>
 		
-		<el-table :data="tableData" style="width: 100%" border class="table-box"
-		 row-key="key" v-loading="loading" :height="tableH">
+		<el-table v-if="tableRefresh" :data="tableData" style="width: 100%" border class="table-box"
+		 row-key="key"  :height="tableH">
 		 <el-table-column :show-overflow-tooltip="true" prop="Name" label="姓名" sortable></el-table-column>
 		 <el-table-column :show-overflow-tooltip="true" prop="Department" label="部门" sortable></el-table-column>
 		 <el-table-column :show-overflow-tooltip="true" prop="Duty" label="职务" sortable></el-table-column>
@@ -55,10 +55,6 @@
 			 layout="total, prev, pager, next, jumper" :total="tableData.length" :current-page.sync="currentPage"></el-pagination>
 		</div> -->
 
-		<!-- 添加成绩 -->
-		<el-dialog title="添加成绩" top="30vh" append-to-body :visible.sync="equipDialog" width="1000px" class="add-Equip">
-			<add-source @source="source"></add-source>
-		</el-dialog>
 	</div>
 </template>
 <script>
@@ -80,82 +76,16 @@
 		data() {
 			return {
 				columnList:[],
-				tableH:'',
+				tableH:'400',
 				formInline:{
 					Name:"",
+					dateBegin: new Date(),
+					dateEnd: new Date(),
+					subject:""
 				},
 				Subject:[],
-				loadingTrue: "", // loading框
-				fileList: [], // 选中的模板  是个数组
-				mokuaiRen: [], // 选择模块 => 下面的人集合
-				data: [], // 选择模块的组织架构
-				defaultProp: {
-					children: "children",
-					label: "displayName"
-				},
-				isModule: false, // 是否存在模块  初始化给的
-				BGJingLi: {}, // 变更经理
-				innerVisible: false, // 使用人选择弹出显示
-				callFlag: false, // 提交之后 所有按钮不可点
-				addFlag: false, // 新增 （新增和导入互斥）
-				importFlag: false, // 导入 （新增和导入互斥）
-				innerVisible: false, // 使用人选择弹出显示
-				submitFlag: true,
-				submitSuccessId: "",
-				currentCollapse: ["1", "2", "3", "4"],
-				headers: {
-					token: localStorage.getItem("token")
-				},
-				equipArr: [],
-				isHistory: false,
-				isTodo: false,
-				childId: "",
-				approveHistory: [],
-				formData: {
-					processId: "", //
-					status: "",
-					applyDate: "",
-					subject: "",
-					applicant: "",
-					telephone: "",
-					order: "",
-					file: [],
-					uploadFile: [],
-					participation: "",
-					planTime: "",
-					provider: "", //
-					projectNum: "", //
-					projectName: "" //
-				},
-				fileRefIds: [],
-				arr: [],
-				dialogVisible: false,
-				defaultExpandAll: true,
-				defaultJoinId: [],
-				joinUser: [],
-				checkedtemplates: [],
-				submitTemplate: [],
-				mainTemplatecachedId: "",
-				equipDialog: false,
-				purchaseOrder: [],
-				templateList: [],
-				tableData: [],
-				loading: false,
-				participantList: [],
-				emptyText: "正在加载...",
-				defaultProps: {
-					children: "children",
-					label: "name"
-				},
-				nowUsingMan: [],
-				userData: [],
-				selectedUser: [], //当前选中的
-				prevSelectedUser: [], //记录上次选中的
-				numPrevCode: 0, //记录是不是第一次点击
-				allSelectedUser: [], //
-				MarkCurrentFlag: true,
-				cancelSelectedUser: [],
 				// 默认显示第几页
+				tableData:[],
 				currentPage: 1,
 				// 总条数，根据接口获取数据长度(注意：这里不能为空)
 				totalCount: 0,
@@ -163,15 +93,14 @@
 				pageSize: 20,
 				pageCount: 5,
 				pages: {}, // 结构树分页数据
-				deptNum: 0,
-				positionCode: [],
 				value: "",
-				importTemplateUrl: ""
+				tableRefresh:true
 			};
 		},
 		methods: {
 			getSubjectType(guid){
-				this.$forceUpdate();
+				//debugger;
+				// this.$forceUpdate();
 			},
 			//获取科目信息
 			getSubject(){
@@ -187,6 +116,7 @@
 			},
 			//获取最新考试时间
 			getLasted(){
+				// this.formInline.dateBegin= new Date('2020-01-01')
 				this.$api.getLatesd("").then(res => {
 					if (res) {
 						this.formInline.dateEnd = res;
@@ -199,6 +129,18 @@
 			},
 			//获取成绩信息
 			list() {
+				this.tableRefresh = false;
+				this.$nextTick(()=>{
+					this.tableRefresh = true;
+					this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-90;
+				})
+				if(!this.formInline.dateBegin ||!this.formInline.dateEnd){
+						this.$message({
+							message: "请先选择考试时间！",
+							type: "warning"
+						});
+						return;
+				}
 				let data = {
 					pid: "",
 					name: this.formInline.name,
@@ -228,10 +170,6 @@
 					console.log(err);
 				})
 			},
-			source(){
-				this.list();
-				this.equipDialog = false;
-			},
 			// 点击导入浏览
 			getTemplate() {
 				this.$refs.template.clearFiles()
@@ -239,120 +177,13 @@
 				this.formData.file = []
 			},
 
-
 			// 分页
 			handleCurrentChange(val) {
 				this.currentPage = val;
 			},
-
-			// 选择模板
-			handleCheckedTemplates(value) {
-				var _this = this;
-				_this.checkedtemplates = value;
-			},
-
-			// 选择单个模板进行下载
-			getClickedTemplate(value) {
-				var _this = this;
-				if (_this.templateList.length > 0) {
-					var url = _this.templateList[0].url;
-				}
-				var loading = this.$loading({
-					lock: true,
-					text: "下载中，请稍后...",
-					background: "rgba(0, 0, 0, 0.7)"
-				});
-				axiosGet(url).then(result => {
-					if (result.code == 200) {
-						window.location.href = _this.constApi + result.data;
-						loading.close();
-					}
-				});
-			},
-
-			handleTemplatePreview(file) {
-
-			},
-
-			// 导入模板 点击导入
-			submitTemplateUpload() {
-				if (this.fileList && this.fileList[0] && this.fileList[0].name) {
-					this.$refs.template.submit();
-				} else {
-					this.$message({
-						message: "请选择导入文件！",
-						type: "warning"
-					});
-				}
-			},
-
-			// 上传模板之前
-			beforeTemplateUpload(file) {
-				this.loadingTrue = this.$loading({
-					lock: true,
-					text: "正在导入，请稍后...",
-					background: "rgba(0, 0, 0, 0.7)"
-				});
-				this.tableData = [];
-			},
-
-			// 导入模板成功
-			templateImportSuccess(response, file, filelist) {
-				this.loadingTrue.close();
-				var _this = this;
-				if (response.code === 200) {
-					_this.$message({
-						message: "导入成功",
-						type: "success"
-					});
-					_this.formData.file = filelist;
-					_this.mainTemplatecachedId = response.data.cacheId;
-					_this.tableData = response.data.data;
-					_this.totalCount = _this.tableData.length;
-					this.$refs.ruleForm.clearValidate("file");
-					this.addFlag = true;
-				} else {
-					_this.$message.error(response.data);
-				}
-			},
-
-			templateImportError(response, file, filelist) {
-				this.loadingTrue.close();
-				this.$message.error(response.message);
-			},
-
-			templatebeforeRemove(file, fileList) {
-				var _this = this;
-				this.addFlag = false;
-				return this.$confirm(`确定移除 ${file.name}？`, {
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning"
-				});
-			},
-
-			handleTemplateRemove(file, fileList) {
-				this.tableData = [];
-			},
-
-			handleTemplateExceed(files, fileList) {
-				this.$message.warning(`当前限制选择 1 个文件，本次已选择了 1 个文件`);
-			},
-
-			// 你所选中文件的信息
-			handleTemplatechange(file, fileList) {
-				this.fileList = fileList;
-			},
-			// 新增按钮跳转
-			addrouter() {
-				this.equipDialog = true;
-			},
 		},
 		mounted() {
 			this.getSubject();
-			this.$nextTick(()=>{
-				this.tableH = document.documentElement.clientHeight - 80 -this.$refs.searchDiv.$el.clientHeight-90;
-			})
 		}
 	};
 </script>

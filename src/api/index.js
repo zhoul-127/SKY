@@ -17,8 +17,8 @@ import {
 	MessageBox
 } from 'element-ui'
 import request from '@/axios/request'
-//let Intranet = `http://39.99.173.172:8082/api`;
-let Intranet = `/api`;
+let Intranet = `http://39.99.173.172:8082/api`;
+//let Intranet = `/api`;
 const api = {
 	url:"http://39.99.173.172:8082",
 	getToken(data) {
@@ -155,6 +155,46 @@ const api = {
 	GetSubjectAchive(data) {
 		return request({
 			url: `${Intranet}/personalAnalysis/GetSubjectAchive`,
+			method: 'get',
+			params: data
+		})
+	},
+	//部门列表
+	GetDepartList(data) {
+		return request({
+			url: `${Intranet}/Personalfiles/GetDepartList`,
+			method: 'get',
+			params: data
+		})
+	},
+	//人员级别
+	GetLevelByDepartment(data) {
+		return request({
+			url: `${Intranet}/Personalfiles/GetLevelByDepartment`,
+			method: 'get',
+			params: data
+		})
+	},
+	//部门综合指标
+	GetDepartmentAnalysisInfo(data) {
+		return request({
+			url: `${Intranet}/departmentAnalysis/GetDepartmentAnalysisInfo`,
+			method: 'get',
+			params: data
+		})
+	},
+	//科目人员分布
+	GetSubjectDistribution(data) {
+		return request({
+			url: `${Intranet}/departmentAnalysis/GetSubjectDistribution`,
+			method: 'get',
+			params: data
+		})
+	},
+	//最近一次科目平均成绩
+	GetLatesSubjectScore(data) {
+		return request({
+			url: `${Intranet}/departmentAnalysis/GetLatesSubjectScore`,
 			method: 'get',
 			params: data
 		})

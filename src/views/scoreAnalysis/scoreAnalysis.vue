@@ -226,6 +226,7 @@
 				khcjChart: "",
 				khmcChart: "",
 				zdlzChart: "",
+				dkmcjChart:"",
 				dataPM:{},
 				Subject:[],
 				SubjectGuid:"",
@@ -233,7 +234,17 @@
 			}
 		},
 		created() {
+			var that = this;
 			this.GetRandomPersonalfile();
+			window.onresize = () => {
+			return (() => {
+				that.zhslChart.resize();
+				that.khcjChart.resize();
+				that.khmcChart.resize();
+				that.zdlzChart.resize();
+				that.dkmcjChart.resize();
+			})()
+			}
 		},
 		components: {
 			'select-user': selectUser,
@@ -388,7 +399,12 @@
 						type: 'radar',
 						data: [{
 							value: data,
-							name: '值'
+							name: '值',
+							areaStyle: {
+									normal: {
+										color: 'rgba(0, 255, 255, 0.8)' // 选择区域颜色
+									}
+								}
 						}, ]
 					}]
 				});
@@ -606,7 +622,7 @@
 					series: [{
 						name: '2011年',
 						type: 'bar',
-						barWidth: "20",
+						barWidth: "14",
 						data: data
 					}]
 				});
@@ -749,7 +765,7 @@
 			background: url('../../assets/images/head_bg.png') no-repeat 100%;
 			background-size: cover;
 			color: #fff;
-			font-size: 32px;
+			font-size: 30px;
 			letter-spacing: 4px;
 			display: flex;
 			justify-content: center;
