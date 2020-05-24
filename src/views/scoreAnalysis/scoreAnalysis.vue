@@ -302,6 +302,11 @@
 			},
 			// 近10次运动记录
 			GetSportRecord() {
+				var loading = this.$loading({
+					lock: true,
+					text: "分析中，请稍后...",
+					background: "rgba(0, 0, 0, 0.7)"
+				});
 				let data = {
 					pguid: this.PGuid,
 					subguid:this.SubjectGuid
@@ -319,8 +324,10 @@
 					}
 					this.getKHCJ(dataAX,dataAY);
 					this.getKHMC(dataAX,dataBY);
+					loading.close();
 				}).catch(err => {
 					console.log(err);
+					loading.close();
 				})
 			},
 			// 排名
@@ -356,6 +363,7 @@
 			getZHSL(data) {
 				this.zhslChart = this.$echarts.init(document.getElementById('zhsl'));
 				this.zhslChart.setOption({
+					color:['#00f9f9'],
 					title: {
 						text: '综合实力',
 						textStyle: {
@@ -620,7 +628,7 @@
 						data: ['塔山战力', '成长值', '坚持指数', '提升潜力']
 					},
 					series: [{
-						name: '2011年',
+						name: '',
 						type: 'bar',
 						barWidth: "14",
 						data: data

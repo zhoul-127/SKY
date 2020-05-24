@@ -171,7 +171,10 @@
 		}
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 	.el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-		color: #fff !important;
+		color: #EE5050 !important;
+	}
+	.el-submenu .el-submenu__title:hover,.el-submenu .el-submenu__title:focus, {
+		color: #EE5050 !important;
 	}
 
 

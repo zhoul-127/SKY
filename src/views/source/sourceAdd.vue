@@ -45,14 +45,14 @@
 					 :on-preview="handleTemplatePreview" :on-remove="handleTemplateRemove" :before-remove="templatebeforeRemove"
 					 :file-list="formData.file" :on-success="templateImportSuccess" :on-error="templateImportError" :limit="1"
 					 :on-exceed="handleTemplateExceed" :on-change="handleTemplatechange" :headers="headers" accept=".xls,.xlsx"
-					 :disabled="callFlag" :auto-upload="false">
-						<el-button slot="trigger" size="small" height="28px" class="primary-btn" :disabled="callFlag || importFlag">浏览
+					  :auto-upload="false">
+						<el-button slot="trigger" size="small" height="28px" class="primary-btn" >浏览
 						</el-button>
 						
 						<el-button size="small" height="28px" class="primary-btn template-upload" @click="submitTemplateUpload"
-						 :disabled="callFlag || importFlag">导入
+						 >导入
 						</el-button>
-						<el-button size="small" @click="downloadDoc" :disabled="callFlag" class="download">下载模板
+						<el-button size="small" @click="downloadDoc"  class="download">下载模板
 						</el-button>
 					</el-upload>
 				</el-form-item>
@@ -121,73 +121,20 @@
 				Subject:[],
 				loadingTrue: "", // loading框
 				fileList: [], // 选中的模板  是个数组
-				mokuaiRen: [], // 选择模块 => 下面的人集合
-				data: [], // 选择模块的组织架构
-				defaultProp: {
-					children: "children",
-					label: "displayName"
-				},
-				isModule: false, // 是否存在模块  初始化给的
-				BGJingLi: {}, // 变更经理
-				innerVisible: false, // 使用人选择弹出显示
-				callFlag: false, // 提交之后 所有按钮不可点
-				addFlag: false, // 新增 （新增和导入互斥）
-				importFlag: false, // 导入 （新增和导入互斥）
-				innerVisible: false, // 使用人选择弹出显示
 				submitFlag: true,
-				submitSuccessId: "",
-				currentCollapse: ["1", "2", "3", "4"],
 				headers: {
 					token: localStorage.getItem("token")
 				},
-				equipArr: [],
-				isHistory: false,
-				isTodo: false,
-				childId: "",
-				approveHistory: [],
 				formData: {
-					processId: "", //
-					status: "",
-					applyDate: "",
-					subject: "",
-					applicant: "",
-					telephone: "",
-					order: "",
 					file: [],
-					uploadFile: [],
-					participation: "",
-					planTime: "",
-					provider: "", //
-					projectNum: "", //
-					projectName: "" //
 				},
-				fileRefIds: [],
-				arr: [],
-				defaultExpandAll: true,
-				defaultJoinId: [],
-				joinUser: [],
 				checkedtemplates: [],
 				submitTemplate: [],
-				mainTemplatecachedId: "",
 				equipDialog: false,
 				purchaseOrder: [],
 				templateList: [],
 				tableData: [],
 				loading: false,
-				participantList: [],
-				emptyText: "正在加载...",
-				defaultProps: {
-					children: "children",
-					label: "name"
-				},
-				nowUsingMan: [],
-				userData: [],
-				selectedUser: [], //当前选中的
-				prevSelectedUser: [], //记录上次选中的
-				numPrevCode: 0, //记录是不是第一次点击
-				allSelectedUser: [], //
-				MarkCurrentFlag: true,
-				cancelSelectedUser: [],
 				// 默认显示第几页
 				currentPage: 1,
 				// 总条数，根据接口获取数据长度(注意：这里不能为空)
@@ -278,17 +225,10 @@
 				document.body.appendChild(link);
 				link.click();
 			},
-			// 点击导入浏览
-			getTemplate() {
-				this.$refs.template.clearFiles()
-				this.tableData = []
-				this.formData.file = []
-			},
-
-
 			// 分页
 			handleCurrentChange(val) {
 				this.currentPage = val;
+				this.list();
 			},
 
 			// 选择模板
@@ -339,37 +279,30 @@
 					text: "正在导入，请稍后...",
 					background: "rgba(0, 0, 0, 0.7)"
 				});
-				this.tableData = [];
 			},
 
 			// 导入模板成功
 			templateImportSuccess(response, file, filelist) {
 				this.loadingTrue.close();
 				var _this = this;
-				if (response.code === 200) {
+				if (response&&response.Message) {
 					_this.$message({
-						message: "导入成功",
+						message: response.Message,
 						type: "success"
 					});
-					_this.formData.file = filelist;
-					_this.mainTemplatecachedId = response.data.cacheId;
-					_this.tableData = response.data.data;
-					_this.totalCount = _this.tableData.length;
-					this.$refs.ruleForm.clearValidate("file");
-					this.addFlag = true;
+					_this.list();
 				} else {
-					_this.$message.error(response.data);
+					_this.$message.error(response.Error);
 				}
 			},
 
 			templateImportError(response, file, filelist) {
 				this.loadingTrue.close();
-				this.$message.error(response.message);
+				this.$message.error(response.Error);
 			},
 
 			templatebeforeRemove(file, fileList) {
 				var _this = this;
-				this.addFlag = false;
 				return this.$confirm(`确定移除 ${file.name}？`, {
 					confirmButtonText: "确定",
 					cancelButtonText: "取消",
@@ -378,7 +311,7 @@
 			},
 
 			handleTemplateRemove(file, fileList) {
-				this.tableData = [];
+				
 			},
 
 			handleTemplateExceed(files, fileList) {

@@ -98,24 +98,24 @@
 							
 							<table width="100%" border="0" class="table" cellpadding="0" cellspacing="0">
 								<tr>
-									<th class="th_border" style="width:40px;">类别</th>
-									<th class="th_border" style="width:45px;">科目</th>
-									<th class="th_border" style="width:50px;">平均值</th>
-									<th class="th_border" style="width:50px;">最低分</th>
-									<th class="th_border" style="width:50px;">最高分</th>
-									<th class="th_border" style="width:50px;">最高者</th>
-									<th class="th_border" style="width:60px;">历史记录</th>
-									<th class="">保持记录者</th>
+									<th class="th_border" style="width:60px;">类别</th>
+									<th class="th_border" style="width:133px;">科目</th>
+									<th class="th_border" style="width:55px;">平均值</th>
+									<th class="th_border" style="width:46px;">最低分</th>
+									<th class="th_border" style="width:46px;">最高分</th>
+									<th class="th_border slh" style="width:60px;">最高者</th>
+									<th class="th_border slh" style="width:60px;">历史记录</th>
+									<th class="slh" style="width:80px;">保持记录者</th>
 								</tr>
 								<tr v-for="(item,index) in dataSport" :key="index">
-									<td style="width:40px;">{{item.SubjectType}}</td>
-									<td style="width:45px;">{{item.Subject}}</td>
-									<td style="width:50px;">{{item.ScoreAvg}}</td>
-									<td style="width:50px;">{{item.ScoreMin}}</td>
-									<td style="width:50px;">{{item.ScoreMax}}</td>
-									<td style="width:50px;">{{item.maxScoreName}}</td>
-									<td style="width:50px;">{{item.maxHistoryScore}}</td>
-									<td  :title="item.maxHistoryScoreName">{{item.maxHistoryScoreName}}</td>
+									<td style="width:40px;" v-if="item.count" :rowspan="item.count">{{item.SubjectType}}</td>
+									<td style="width:133px;">{{item.Subject}}</td>
+									<td style="width:55px;">{{item.ScoreAvg}}</td>
+									<td style="width:46px;">{{item.ScoreMin}}</td>
+									<td style="width:46px;">{{item.ScoreMax}}</td>
+									<td class="slh" style="width:50px;" :title="item.maxScoreName">{{item.maxScoreName}}</td>
+									<td class="slh" style="width:50px;" :title="item.maxHistoryScore">{{item.maxHistoryScore}}</td>
+									<td class="slh"  :title="item.maxHistoryScoreName">{{item.maxHistoryScoreName}}</td>
 								</tr>
 							</table>
 						</div>
@@ -204,17 +204,42 @@
 			},
 			// 部门综合指标
 			GetDepartmentAnalysisInfo() {
+				var loading = this.$loading({
+					lock: true,
+					text: "分析中，请稍后...",
+					background: "rgba(0, 0, 0, 0.7)"
+				});
 				let data = {
 					department: this.department,
 					Level:this.Level
 				};
 				this.$api.GetDepartmentAnalysisInfo(data).then(res => {
 					this.data = res;
+					//合并操作
+					var count = 0;
+					for(var i=0;i<res.data.length;i++){
+						if(i<res.data.length-1){
+							if(res.data[i].SubjectType == res.data[i+1].SubjectType){
+								count ++;
+							}else{
+								res.data[i-count].count = count+1;
+								count = 0;
+							}
+						}else{
+							if(res.data[i-1].SubjectType == res.data[i].SubjectType){
+								count ++;
+							}
+							res.data[i-count+1].count = count;
+							count = 0;
+						}
+					}
 					this.dataSport = res.data;
 					var ldtData = [res.speed,res.power,res.endurance,res.flexibility,res.sensitivity];
 					this.getZHSL(ldtData);
+					loading.close();
 				}).catch(err => {
 					console.log(err);
+					loading.close();
 				})
 			},
 			// 科目人员分布
@@ -585,13 +610,14 @@
 
 				.middle-l-b {
 					height:calc(66.66%);;
-.table {
+					.table {
 						border-collapse: collapse;
 						font-size: 13px;
 						height: 30px;
 						line-height: 30px;
 						color: #09F;
 						text-align: center;
+						table-layout: fixed;
 					}
 
 					.table tr th {
@@ -600,6 +626,8 @@
 						font-size: 13px;
 						height: 30px;
 						line-height: 30px;
+					}
+					.table .slh{
 						overflow: hidden;
 						white-space:nowrap;
 						word-break: break-all;
@@ -613,10 +641,6 @@
 
 					.table tr td {
 						border: solid 1px #254b80;
-						overflow: hidden;
-						white-space:nowrap;
-						word-break: break-all;
-						text-overflow: ellipsis;
 					}
 				
 					}

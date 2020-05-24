@@ -70,6 +70,9 @@ export default {
   .el-container {
     height: 100%;
   }
+  .is-vertical .el-container{
+    height: calc(100% - 80px) !important;
+  }
   .el-aside {
     background: #eef1f6;
   }
