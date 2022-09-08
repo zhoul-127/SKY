@@ -16,7 +16,7 @@
     "http-proxy-middleware": "^1.0.4",
     "js-cookie": "^2.2.1",
     "js-file-download": "^0.4.8",
-    "jszip": "^3.2.1",
+    "jszip": "^3.7.0",
     "mockjs": "^1.0.1-beta3",
     "vue": "^2.6.10",
     "vue-print-nb": "^1.4.0",
